@@ -1,0 +1,7 @@
+flask
+bs4
+pandas
+nltk
+colorama
+gunicorn
+requests
