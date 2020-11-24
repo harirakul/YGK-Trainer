@@ -7,7 +7,13 @@ app = Flask(__name__)
 with open('subjects.json', 'rb') as f:
     d = json.load(f)
 
-global p
+def save(q: dict):
+    with open("questions.json", 'w') as f:
+        json.dump(q, f)
+
+def load() -> dict:
+    with open("questions.json", 'rb') as f:
+        return json.load(f)
 
 @app.route('/')
 def hello_world():
@@ -15,18 +21,17 @@ def hello_world():
 
 @app.route('/play/<topic>')
 def play(topic):
-    global p
     p = YGKPage(f"https://www.naqt.com/{d[topic]}")
+    save(p.questions)
     q = list(p.questions.keys())
     a = list(p.questions.values())
     return render_template('quiz.html', title=p.name, topic = topic, q = q, a = a)
 
 @app.route('/results/<topic>', methods=['GET', 'POST'])
 def eval(topic):
-    global p
-    #p = YGKPage(f"https://www.naqt.com/{d[topic]}")
-    q = list(p.questions.keys())
-    a = list(p.questions.values())
+    p = load()
+    q = list(p.keys())
+    a = list(p.values())
     results = []
     for i in range(len(request.form)):
         if request.form.get(list(request.form.keys())[i]).lower() == a[i].lower():
