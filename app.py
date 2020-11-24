@@ -7,12 +7,15 @@ app = Flask(__name__)
 with open('subjects.json', 'rb') as f:
     d = json.load(f)
 
+global p
+
 @app.route('/')
 def hello_world():
     return render_template('index.html')
 
 @app.route('/play/<topic>')
 def play(topic):
+    global p
     p = YGKPage(f"https://www.naqt.com/{d[topic]}")
     q = list(p.questions.keys())
     a = list(p.questions.values())
@@ -20,7 +23,8 @@ def play(topic):
 
 @app.route('/results/<topic>', methods=['GET', 'POST'])
 def eval(topic):
-    p = YGKPage(f"https://www.naqt.com/{d[topic]}")
+    global p
+    #p = YGKPage(f"https://www.naqt.com/{d[topic]}")
     q = list(p.questions.keys())
     a = list(p.questions.values())
     results = []
