@@ -34,7 +34,7 @@ def eval(topic):
     a = list(p.values())
     results = []
     for i in range(len(request.form)):
-        if request.form.get(list(request.form.keys())[i]).lower() == a[i].lower():
+        if request.form.get(list(request.form.keys())[i]).lower() == a[i].lower().strip('“”.'):
             results.append(1)
         else: results.append(0)
     
